@@ -32,9 +32,6 @@ export class MapComponent implements OnInit {
           latitude: 51.5002,
           longitude: -0.1262,
           scale: 1.5,
-          zoomLevel: 2.74,
-          zoomLongitude: -20.1341,
-          zoomLatitude: 49.1712,
 
           lines: [{
             latitudes: [51.5002, 50.4422],
@@ -83,9 +80,6 @@ export class MapComponent implements OnInit {
           latitude: 54.6896,
           longitude: 25.2799,
           scale: 1.5,
-          zoomLevel: 4.92,
-          zoomLongitude: 15.4492,
-          zoomLatitude: 50.2631,
 
           lines: [{
             latitudes: [54.6896, 50.8371],
@@ -120,11 +114,17 @@ export class MapComponent implements OnInit {
           }, {
             latitudes: [54.6896, 53.3441],
             longitudes: [25.2799, -6.2675]
+          }, {
+            id: "line1",
+            arc: -0.85,
+            alpha: 0.3,
+            latitudes: [ 48.8567, 43.8163, 34.3, 23 ],
+            longitudes: [ 2.3510, -79.4287, -118.15, -82 ]
           }],
 
           images: [{
             label: 'Flights from Vilnius',
-            svgPath: planeSVG,
+            svgPath: targetSVG,
             left: 100,
             top: 45,
             labelShiftY: 5,
@@ -141,6 +141,25 @@ export class MapComponent implements OnInit {
             labelFontSize: 11,
             linkToObject: 'london'
           }]
+        }, {
+          id: "plane1",
+          svgPath: planeSVG,
+          positionOnLine: 0,
+          color: '#585869',
+          animateAlongLine: true,
+          lineId: 'line1',
+          scale: 0.03,
+          positionScale: 1.8
+        }, {
+          id: "plane2",
+          svgPath: planeSVG,
+          positionOnLine: 0,
+          color: "#ff0000",
+          lineId: "line1",
+          flipDirection: true,
+          loop: true,
+          scale: 0.03,
+          positionScale: 1.3
         }, {
           svgPath: targetSVG,
           title: 'Brussels',
@@ -218,6 +237,8 @@ export class MapComponent implements OnInit {
           longitude: 30.5367
         }, {
           svgPath: targetSVG,
+          zoomLevel: 5,
+          scale: 0.5,
           title: 'Paris',
           latitude: 48.8567,
           longitude: 2.3510
@@ -229,16 +250,40 @@ export class MapComponent implements OnInit {
         }
         ]
       },
+      listeners: [{
+        event: "clickMapObject",
+        method: function (event) {
+          if (event.mapObject.svgPath !== undefined) {
+            event.mapObject.validate();
+          }
+        }
+      }, {
+        event: "init",
+        method: function (event) {
+          var plane = event.chart.getObjectById("plane1");
+          plane.animateAlong("line1");
+
+          var planee = event.chart.getObjectById("plane2");
+          planee.animateAlong("line1");
+        }
+      }],
 
       areasSettings: {
         unlistedAreasColor: '#8DD9EF',
-        color: "#228B22"
+        color: '#228B22',
+        selectedColor: '#CC0000'
       },
 
       imagesSettings: {
+        selectable: true,
         color: '#CC0000',
         rollOverColor: '#CC0000',
-        selectedColor: '#000000'
+        selectedColor: '#000000',
+        rollOverScale: 1.5,
+        selectedScale: 3,
+        pauseDuration: 0.2,
+        animationDuration: 2.5,
+        adjustAnimationSpeed: true
       },
 
       linesSettings: {

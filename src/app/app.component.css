@@ -1,5 +1,11 @@
 @media (min-width: 1200px) {
     .container{
         max-width: 1400px;
+        height: 100%;
+    }
+
+    .tabcontainer{
+        min-height: 500px;
+        border: red 1px solid;
     }
 }
